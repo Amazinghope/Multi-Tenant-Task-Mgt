@@ -5,6 +5,7 @@ const dbConnection = require("./config/db");
 const serverError = require("./utils/serverError");
 const globalErrorHandler = require("./middleware/globalErrorHandler");
 const catchAsyncError = require("./utils/catchAsync");
+const authRouter = require("./routes/auth")
 dotenv.config();
 
 const app = express();
@@ -26,6 +27,8 @@ app.get(
   }),
 );
 
+app.use("/api/auth", authRouter)
+
 // Catch unknown routes
 app.use((req, res, next) => {
     next(new serverError(`Cannot find ${req.originalUrl}`, 404))
@@ -35,6 +38,7 @@ app.use((req, res, next) => {
 app.use(globalErrorHandler)
 //connect to database
 dbConnection();
+
 
 //app connects to port
 const PORT = process.env.PORT || 6000;
